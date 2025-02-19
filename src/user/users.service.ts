@@ -4,6 +4,7 @@ import { UpdateUsersDto } from './dto/update-users.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './entities/users.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -12,9 +13,28 @@ export class UsersService {
     private readonly userRepository: Repository<Users>,
   ) {}
 
+  // Function to decrypt
+  // async validateUser(email: string, password: string): Promise<User | null> {
+  //   const user = await this.userRepository.findOne({ where: { email } });
+  //   if (user && (await bcrypt.compare(password, user.password))) {
+  //     return user; // Passwords match
+  //   }
+  //   return null; // Passwords do not match
+  // }
+
   async create(createUsersDto: CreateUsersDto): Promise<Users> {
-    const userData = this.userRepository.create(createUsersDto);
-    return this.userRepository.save(userData);
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(
+      createUsersDto.password,
+      saltRounds,
+    );
+
+    const user = this.userRepository.create({
+      ...createUsersDto,
+      password: hashedPassword,
+    });
+
+    return this.userRepository.save(user);
   }
 
   async findAll(): Promise<Users[]> {
