@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Controller,
   Get,
@@ -7,18 +9,18 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service';
+import { CreateUsersDto } from './dto/create-users.dto';
+import { UpdateUsersDto } from './dto/update-users.dto';
 
-@Controller('users') //route group
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUsersDto: CreateUsersDto) {
     try {
-      await this.userService.create(createUserDto);
+      await this.usersService.create(createUsersDto);
 
       return {
         success: true,
@@ -35,11 +37,11 @@ export class UserController {
   @Get()
   async findAll() {
     try {
-      const data = await this.userService.findAll();
+      const data = await this.usersService.findAll();
       return {
         success: true,
         data,
-        message: 'User Fetched Successfully',
+        message: 'Users Fetched Successfully',
       };
     } catch (error) {
       return {
@@ -52,7 +54,7 @@ export class UserController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
-      const data = await this.userService.findOne(+id);
+      const data = await this.usersService.findOne(+id);
       return {
         success: true,
         data,
@@ -67,9 +69,12 @@ export class UserController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUsersDto: UpdateUsersDto,
+  ) {
     try {
-      await this.userService.update(+id, updateUserDto);
+      await this.usersService.update(+id, updateUsersDto);
       return {
         success: true,
         message: 'User Updated Successfully',
@@ -85,7 +90,7 @@ export class UserController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
-      await this.userService.remove(+id);
+      await this.usersService.remove(+id);
       return {
         success: true,
         message: 'User Deleted Successfully',
