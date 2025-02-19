@@ -2,17 +2,20 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './user/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: './db/db_notes',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      database: './src/database/database.sqlite', // Path to your SQLite database file
+      entities: [__dirname + '/**/*.entity{.ts,.js}'], // Path to your entities
+      synchronize: false, // Always false when using migrations
+      logging: true, // Enable logging for debugging
+      migrationsTableName: 'typeorm_migrations', // Name of the migrations table
+      migrationsRun: false, // Disable auto-running migrations
     }),
-    UserModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
