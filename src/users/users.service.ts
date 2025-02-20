@@ -13,15 +13,6 @@ export class UsersService {
     private readonly userRepository: Repository<Users>,
   ) {}
 
-  // Function to decrypt
-  // async validateUser(email: string, password: string): Promise<User | null> {
-  //   const user = await this.userRepository.findOne({ where: { email } });
-  //   if (user && (await bcrypt.compare(password, user.password))) {
-  //     return user; // Passwords match
-  //   }
-  //   return null; // Passwords do not match
-  // }
-
   async create(createUsersDto: CreateUsersDto): Promise<Users> {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(
