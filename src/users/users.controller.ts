@@ -54,7 +54,7 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
-      const data = await this.usersService.findOne(+id);
+      const data = await this.usersService.findOneById(+id);
       return {
         success: true,
         data,

@@ -41,7 +41,15 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
-  async findOne(id: number): Promise<Users> {
+  async findOneByEmail(email: string): Promise<Users> {
+    const userData = await this.userRepository.findOneBy({ email });
+    if (!userData) {
+      throw new HttpException('User Not Found', 404);
+    }
+    return userData;
+  }
+
+  async findOneById(id: number): Promise<Users> {
     const userData = await this.userRepository.findOneBy({ id });
     if (!userData) {
       throw new HttpException('User Not Found', 404);
@@ -50,13 +58,13 @@ export class UsersService {
   }
 
   async update(id: number, updateUsersDto: UpdateUsersDto): Promise<Users> {
-    const existingUser = await this.findOne(id);
+    const existingUser = await this.findOneById(id);
     const userData = this.userRepository.merge(existingUser, updateUsersDto);
     return await this.userRepository.save(userData);
   }
 
   async remove(id: number): Promise<Users> {
-    const existingUser = await this.findOne(id);
+    const existingUser = await this.findOneById(id);
     return await this.userRepository.remove(existingUser);
   }
 }
