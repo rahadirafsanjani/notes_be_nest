@@ -10,7 +10,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUsersDto } from './dto/create-users.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 
 @Controller('users')
@@ -18,9 +18,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUsersDto: CreateUsersDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
     try {
-      await this.usersService.create(createUsersDto);
+      await this.usersService.create(createUserDto);
 
       return {
         success: true,

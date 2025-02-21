@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { CreateUsersDto } from './dto/create-users.dto';
+import { CreateUsersDto } from './dto/create-user.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectRepository(Users)
-    private readonly userRepository: Repository<Users>,
+    private readonly usersRepository: Repository<Users>,
   ) {}
 
   async create(createUsersDto: CreateUsersDto): Promise<Users> {
@@ -20,20 +20,20 @@ export class UsersService {
       saltRounds,
     );
 
-    const user = this.userRepository.create({
+    const user = this.usersRepository.create({
       ...createUsersDto,
       password: hashedPassword,
     });
 
-    return this.userRepository.save(user);
+    return this.usersRepository.save(user);
   }
 
   async findAll(): Promise<Users[]> {
-    return await this.userRepository.find();
+    return await this.usersRepository.find();
   }
 
   async findOneByEmail(email: string): Promise<Users> {
-    const userData = await this.userRepository.findOneBy({ email });
+    const userData = await this.usersRepository.findOneBy({ email });
     if (!userData) {
       throw new HttpException('User Not Found', 404);
     }
@@ -41,7 +41,7 @@ export class UsersService {
   }
 
   async findOneById(id: number): Promise<Users> {
-    const userData = await this.userRepository.findOneBy({ id });
+    const userData = await this.usersRepository.findOneBy({ id });
     if (!userData) {
       throw new HttpException('User Not Found', 404);
     }
@@ -50,12 +50,12 @@ export class UsersService {
 
   async update(id: number, updateUsersDto: UpdateUsersDto): Promise<Users> {
     const existingUser = await this.findOneById(id);
-    const userData = this.userRepository.merge(existingUser, updateUsersDto);
-    return await this.userRepository.save(userData);
+    const userData = this.usersRepository.merge(existingUser, updateUsersDto);
+    return await this.usersRepository.save(userData);
   }
 
   async remove(id: number): Promise<Users> {
     const existingUser = await this.findOneById(id);
-    return await this.userRepository.remove(existingUser);
+    return await this.usersRepository.remove(existingUser);
   }
 }
