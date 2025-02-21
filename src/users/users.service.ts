@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { CreateUsersDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,7 +13,7 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async create(createUsersDto: CreateUsersDto): Promise<Users> {
+  async create(createUsersDto: CreateUserDto): Promise<Users> {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(
       createUsersDto.password,
