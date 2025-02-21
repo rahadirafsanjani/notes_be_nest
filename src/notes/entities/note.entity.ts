@@ -1,7 +1,9 @@
+import { LabelNotes } from 'src/label-notes/entities/label-note.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,6 +18,9 @@ export class Notes {
 
   @Column()
   content: string;
+
+  @OneToMany(() => LabelNotes, (labelNote) => labelNote.note)
+  labelNotes: Promise<LabelNotes[]>;
 
   @CreateDateColumn()
   createdAt: Date;

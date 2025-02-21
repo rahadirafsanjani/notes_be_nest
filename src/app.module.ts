@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { NotesModule } from './notes/notes.module';
+import { LabelsModule } from './labels/labels.module';
+import { LabelNotesModule } from './label-notes/label-notes.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -19,6 +21,8 @@ import { NotesModule } from './notes/notes.module';
     UsersModule,
     AuthModule,
     NotesModule,
+    LabelsModule,
+    LabelNotesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
